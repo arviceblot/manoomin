@@ -3,26 +3,17 @@ using System.Collections;
 
 public class ApplicationManager : MonoBehaviour
 {
-    // TODO: singleton seems to work for one loop of scene changes, but not after
-    private static ApplicationManager instance;
+    private static ApplicationManager instance = null;
 
     public static ApplicationManager Instance
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<ApplicationManager>();
-            }
-
-            return instance;
-        }
+        get { return instance; }
     }
 
     [SerializeField]
     private KeyCode m_quitKey = KeyCode.Escape;
 
-    private void OnEnable()
+    private void Awake()
     {
         if (instance != null && instance != this)
         {
@@ -32,20 +23,6 @@ public class ApplicationManager : MonoBehaviour
         }
 
         instance = this;
-    }
-
-    private void OnDisable()
-    {
-        instance = null;
-    }
-
-    private void OnDestroy()
-    {
-        instance = null;
-    }
-
-    private void Awake()
-    {
         DontDestroyOnLoad(gameObject);
     }
 
