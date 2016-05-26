@@ -5,6 +5,8 @@ public class TrackMouse : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody target;
+    [SerializeField]
+    private float scale;
     
     private Vector3 previousPosition;
 
@@ -20,6 +22,7 @@ public class TrackMouse : MonoBehaviour
         var currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var velocity = currentPosition - previousPosition;
 
-        target.velocity = velocity;
+        target.velocity = velocity * scale;
+        previousPosition = currentPosition;
     }
 }
