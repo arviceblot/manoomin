@@ -1,32 +1,44 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class ChangeScene : MonoBehaviour
 {
     [SerializeField]
+    private List<SceneChangeTrigger> m_changeTriggers;
+
+    [HideInInspector]
     public string m_scenePath;
 
-    // TODO: fix this in the editor script so it is visible
-    [SerializeField]
-    private KeyCode m_defaultSwitchTriggerKey = KeyCode.N;
-
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(m_defaultSwitchTriggerKey))
+        // add any trigger on the app manager
+        var appManager = FindObjectOfType<ApplicationManager>();
+        m_changeTriggers.AddRange(appManager.GetComponents<SceneChangeTrigger>());
+
+        foreach (var trigger in m_changeTriggers)
         {
-            Change();
+            trigger.OnTrigger += Change;
         }
     }
 
-    public void Change()
+    private void OnDisable()
+    {
+        foreach (var trigger in m_changeTriggers)
+        {
+            trigger.OnTrigger -= Change;
+        }
+    }
+
+    private void Change()
     {
         // remove the parts of the filepath necessary for loading the scene correctly
         // there really should be a better way of doing this
         var scene = Regex.Replace(m_scenePath, "\\.unity", String.Empty);
         scene = Regex.Replace(scene, "Assets/", String.Empty);
+
         // load the scene
         Debug.Log("Loading scene: " + scene);
         SceneManager.LoadScene(scene);
