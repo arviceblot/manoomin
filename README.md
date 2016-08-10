@@ -1,1 +1,2 @@
-# gifts-of-water
+# manoominike
+THE Wild Ricing Game
