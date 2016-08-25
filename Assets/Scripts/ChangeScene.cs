@@ -8,6 +8,8 @@ public class ChangeScene : MonoBehaviour
 {
     [SerializeField]
     private List<SceneChangeTrigger> m_changeTriggers;
+    [SerializeField]
+    private bool changeOnStart = false;
 
     [HideInInspector]
     public string m_scenePath;
@@ -21,6 +23,14 @@ public class ChangeScene : MonoBehaviour
         foreach (var trigger in m_changeTriggers)
         {
             trigger.OnTrigger += Change;
+        }
+    }
+
+    private void Start()
+    {
+        if (changeOnStart)
+        {
+            Change();
         }
     }
 
