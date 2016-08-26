@@ -25,8 +25,10 @@ public class TextLearning : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        anishinaabemowinText.color = Color.clear;
-        englishText.color = Color.clear;
+        anishinaabemowinText.GetComponent<CanvasRenderer>().SetAlpha(0);
+        englishText.GetComponent<CanvasRenderer>().SetAlpha(0);
+
+        scriptStartTime = Time.time;
 
         StartCoroutine(Fade());
     }
@@ -39,24 +41,29 @@ public class TextLearning : MonoBehaviour
 
     private IEnumerator Fade()
     {
-        scriptStartTime = Time.time;
-        Debug.Log("Waiting for start time.");
-        yield return new WaitForSeconds(scriptStartTime + startTime);
+        // wait for start time
+        yield return new WaitForSeconds(startTime);
 
-        Debug.Log("Starting fade in.");
+        // fade in
+        anishinaabemowinText.CrossFadeAlpha(1f, fadeDuration, false);
+        yield return new WaitForSeconds(fadeDuration);
 
-        var fadeInStartTime = Time.time;
-        var fadeInSpeed = 256f / fadeDuration;
-        Debug.Log("Fade speed: " + fadeInSpeed);
-        //yield return new WaitForSeconds(0.01f);
-        while (fadeDuration > Time.time - fadeInStartTime)
-        {
-            Color.Lerp(anishinaabemowinText.color, Color.white, fadeInSpeed * Time.deltaTime);
-            Debug.Log("Fading in.");
-            yield return null;
-        }
-
-        Debug.Log("Holding.");
+        // hold for duration
         yield return new WaitForSeconds(holdDuration);
+
+        // fade out
+        anishinaabemowinText.CrossFadeAlpha(0f, fadeDuration, false);
+        yield return new WaitForSeconds(fadeDuration);
+
+        // fade in english
+        englishText.CrossFadeAlpha(1f, fadeDuration, false);
+        yield return new WaitForSeconds(fadeDuration);
+
+        // hold for duration
+        yield return new WaitForSeconds(holdDuration);
+
+        // fade out
+        englishText.CrossFadeAlpha(0f, fadeDuration, false);
+        yield return new WaitForSeconds(fadeDuration);
     }
 }

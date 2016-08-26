@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(MeshRenderer), typeof(AudioClip))]
+[RequireComponent(typeof(SpriteRenderer), typeof(AudioClip))]
 public class Movie : MonoBehaviour
 {
     [SerializeField]
