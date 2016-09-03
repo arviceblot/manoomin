@@ -10,7 +10,7 @@ public class TextLearning : MonoBehaviour
     private Text englishText;
 
     [SerializeField]
-    [Tooltip("The time to start the fade in animation.")]
+    [Tooltip("The time to wait before we start the fade in animation.")]
     private float startTime;
     [SerializeField]
     [Tooltip("Duration in seconds to display the text once fully visible.")]
@@ -19,24 +19,13 @@ public class TextLearning : MonoBehaviour
     [Tooltip("Duration in seconds to fade the text in and out.")]
     private float fadeDuration;
 
-    // the time the script started, used for determining when to start the fade in
-    private float scriptStartTime;
-
     // Use this for initialization
     void Start()
     {
         anishinaabemowinText.GetComponent<CanvasRenderer>().SetAlpha(0);
         englishText.GetComponent<CanvasRenderer>().SetAlpha(0);
 
-        scriptStartTime = Time.time;
-
         StartCoroutine(Fade());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private IEnumerator Fade()
