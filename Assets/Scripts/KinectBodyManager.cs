@@ -5,22 +5,27 @@ using System.Collections.Generic;
 
 public class KinectBodyManager : MonoBehaviour
 {
-    public event Action<Body> OnBodyEnter;
-    public event Action<ulong> OnBodyLeave;
+    public event Action<KinectBody> EventBodyEnter;
+    public event Action<ulong> EventBodyLeave;
 
     [SerializeField]
     private BodySourceManager bodySourceManager;
 
-    private Dictionary<ulong, Body> bodies;
+    private IDictionary<ulong, KinectBody> kinectBodies;
 
-    // Use this for initialization
-    void Start()
+    public ICollection<KinectBody> Bodies
     {
-        bodies = new Dictionary<ulong, Body>();
+        get { return kinectBodies.Values; }
     }
 
-    // Update is called once per frame
-    void Update()
+    #region MonoBehaviour
+
+    private void Start()
+    {
+        kinectBodies = new Dictionary<ulong, KinectBody>();
+    }
+
+    private void Update()
     {
         var data = bodySourceManager.GetData();
 
@@ -36,12 +41,12 @@ public class KinectBodyManager : MonoBehaviour
         }
 
         // remove untracked bodies
-        foreach (var id in bodies.Keys)
+        foreach (var id in kinectBodies.Keys)
         {
             if (!trackedIDs.Contains(id))
             {
-                BodyLeave(id);
-                bodies.Remove(id);
+                OnBodyLeave(id);
+                kinectBodies.Remove(id);
             }
         }
 
@@ -50,36 +55,45 @@ public class KinectBodyManager : MonoBehaviour
         {
             if (body.IsTracked)
             {
-                if (!bodies.ContainsKey(body.TrackingId))
+                if (!kinectBodies.ContainsKey(body.TrackingId))
                 {
-                    bodies[body.TrackingId] = body;
-                    BodyEnter(body);
+                    var newBody = new KinectBody();
+                    kinectBodies[body.TrackingId] = newBody; 
+                    OnBodyEnter(newBody);
                 }
             }
         }
-    }
-
-    private void BodyEnter(Body body)
-    {
-        if (OnBodyEnter != null)
+        
+        // update all existing bodies
+        foreach (var body in data)
         {
-            OnBodyEnter(body);
+            kinectBodies[body.TrackingId].Update(body);
         }
     }
 
-    private void BodyLeave(ulong id)
+    #endregion
+
+    private void OnBodyEnter(KinectBody body)
     {
-        if (OnBodyLeave != null)
+        if (EventBodyEnter != null)
         {
-            OnBodyLeave(id);
+            EventBodyEnter(body);
         }
     }
 
-    public Body GetBody(ulong id)
+    private void OnBodyLeave(ulong id)
     {
-        if (bodies.ContainsKey(id))
+        if (EventBodyLeave != null)
         {
-            return bodies[id];
+            EventBodyLeave(id);
+        }
+    }
+
+    public KinectBody GetBody(ulong id)
+    {
+        if (kinectBodies.ContainsKey(id))
+        {
+            return kinectBodies[id];
         }
         else
         {
