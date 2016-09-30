@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Windows.Kinect;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class KinectBodyManager : MonoBehaviour
@@ -10,8 +12,29 @@ public class KinectBodyManager : MonoBehaviour
 
     [SerializeField]
     private BodySourceManager bodySourceManager;
+    [SerializeField]
+    private bool debug = false;
+    [SerializeField]
+    private Text debugText;
 
     private IDictionary<ulong, KinectBody> kinectBodies;
+
+    public bool Debug
+    {
+        get { return debug; }
+        set
+        {
+            debug = value;
+            if (debug)
+            {
+                StartCoroutine(DisplayDebug());
+            }
+            else
+            {
+                StopCoroutine(DisplayDebug());
+            }
+        }
+    }
 
     public ICollection<KinectBody> Bodies
     {
@@ -23,11 +46,18 @@ public class KinectBodyManager : MonoBehaviour
     private void Start()
     {
         kinectBodies = new Dictionary<ulong, KinectBody>();
+        Debug = debug;
     }
 
     private void Update()
     {
         var data = bodySourceManager.GetData();
+
+        // this will usually not be initialzed at the start of play
+        if (data == null)
+        {
+            return;
+        }
 
         // figure out if any bodies have been updated
         // also keep track of the current tracked IDs
@@ -46,7 +76,7 @@ public class KinectBodyManager : MonoBehaviour
             if (!trackedIDs.Contains(id))
             {
                 OnBodyLeave(id);
-                kinectBodies.Remove(id);
+                kinectBodies[id].enabled = false;
             }
         }
 
@@ -57,21 +87,22 @@ public class KinectBodyManager : MonoBehaviour
             {
                 if (!kinectBodies.ContainsKey(body.TrackingId))
                 {
-                    var newBody = new KinectBody();
-                    kinectBodies[body.TrackingId] = newBody; 
+                    var newBody = gameObject.AddComponent<KinectBody>();
+                    newBody.Body = body;
+                    kinectBodies[body.TrackingId] = newBody;
                     OnBodyEnter(newBody);
                 }
+                else if (!kinectBodies[body.TrackingId].enabled)
+                {
+                    kinectBodies[body.TrackingId].enabled = true;
+                }
             }
-        }
-        
-        // update all existing bodies
-        foreach (var body in data)
-        {
-            kinectBodies[body.TrackingId].Update(body);
         }
     }
 
     #endregion
+
+    #region Event Handlers
 
     private void OnBodyEnter(KinectBody body)
     {
@@ -101,6 +132,22 @@ public class KinectBodyManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    private IEnumerator DisplayDebug()
+    {
+        while (true)
+        {
+            debugText.text = "Hand Velocity\n";
+            foreach (var body in Bodies)
+            {
+                debugText.text += "Left: " + body.Velocity(Windows.Kinect.JointType.HandLeft) + "\t";
+                debugText.text += "Right: " + body.Velocity(Windows.Kinect.JointType.HandRight) + "\n";
+            }
+
+            yield return null;
+        }
+    }
     public static Vector3 GetJointPosition2D(Windows.Kinect.Joint joint, float z = 0f)
     {
         // TODO: do projection space calculations here instead of 10x values
