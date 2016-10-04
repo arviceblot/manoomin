@@ -6,8 +6,17 @@ public class Level1Interaction : MonoBehaviour
 {
     [SerializeField]
     private float velocityThreshold = 5f;
+    [SerializeField]
+    private float minimumVelocity = 2f;
+    [SerializeField]
+    private float spawnInterval = 1f;
+    [SerializeField]
+    private Transform spawnPosition;
+    [SerializeField]
+    private GameObject spawnPrefab;
 
     private KinectBodyManager bodyManager;
+    private float lastSpawnTime;
 
     #region MonoBehaviour
 
@@ -17,6 +26,7 @@ public class Level1Interaction : MonoBehaviour
         {
             bodyManager = FindObjectOfType<KinectBodyManager>();
         }
+        lastSpawnTime = spawnInterval;
     }
 
     private void Update()
@@ -32,11 +42,16 @@ public class Level1Interaction : MonoBehaviour
 
         average /= bodyManager.Bodies.Count * 2f;
 
+        lastSpawnTime += Time.deltaTime;
         // check if users are moving too fast
-        if (!(average.magnitude > velocityThreshold))
+        if (average.magnitude < velocityThreshold && average.magnitude > minimumVelocity)
         {
             // do all the things here
-
+            if (lastSpawnTime > spawnInterval)
+            {
+                Instantiate(spawnPrefab, spawnPosition);
+                lastSpawnTime = 0f;
+            }
         }
     }
 
