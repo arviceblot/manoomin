@@ -82,13 +82,15 @@ public class KinectBody : MonoBehaviour
 
     public Vector3 Velocity(JointType joint)
     {
-        var average = Vector3.zero;
-        foreach (var point in lastNpositions[joint])
-        {
-            average += point;
-        }
-        var averagePosition = average / lastNpositions[joint].Count;
-        return averagePosition / times.Sum();
+        //var average = Vector3.zero;
+        var diff = lastNpositions[joint][0] - lastNpositions[joint][lastNpositions[joint].Count - 1];
+        //foreach (var point in lastNpositions[joint])
+        //{
+        //    average += point;
+        //}
+        //var averagePosition = average / lastNpositions[joint].Count;
+        //return averagePosition / times.Sum();
+        return diff / times.Sum();
     }
 
     private static Vector3 ProjectJointPosition(Windows.Kinect.Joint joint, float z = 0f)
