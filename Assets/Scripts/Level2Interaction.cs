@@ -14,10 +14,7 @@ public class Level2Interaction : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        if (bodyManager == null)
-        {
-            bodyManager = FindObjectOfType<KinectBodyManager>();
-        }
+        bodyManager = FindObjectOfType<KinectBodyManager>();
 
         rice = FindObjectsOfType<ParchingRice>();
     }

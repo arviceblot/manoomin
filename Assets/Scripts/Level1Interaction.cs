@@ -22,10 +22,7 @@ public class Level1Interaction : MonoBehaviour
 
     private void Start()
     {
-        if (bodyManager == null)
-        {
-            bodyManager = FindObjectOfType<KinectBodyManager>();
-        }
+        bodyManager = FindObjectOfType<KinectBodyManager>();
         lastSpawnTime = spawnInterval;
     }
 

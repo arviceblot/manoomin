@@ -49,9 +49,17 @@ public class KinectBody : MonoBehaviour
         for (JointType joint = JointType.SpineBase; joint <= JointType.ThumbRight; joint++)
         {
             lastNpositions[joint] = new List<Vector3>(POSITIONS);
+            for (int i = 0; i < POSITIONS; i++)
+            {
+                lastNpositions[joint][i] = Vector3.zero;
+            }
         }
 
         times = new List<float>(POSITIONS);
+        for (int i = 0; i < POSITIONS; i++)
+        {
+            times[i] = 0f;
+        }
     }
 
     public void Update()
@@ -62,18 +70,12 @@ public class KinectBody : MonoBehaviour
             positions[joint] = ProjectJointPosition(body.Joints[joint]);
 
             // remove the last item
-            if (lastNpositions[joint].Count == POSITIONS)
-            {
-                lastNpositions[joint].RemoveAt(POSITIONS - 1);
-            }
+            lastNpositions[joint].RemoveAt(POSITIONS - 1);
             // add new one to the front
             lastNpositions[joint].Insert(0, positions[joint]);
 
             // update times
-            if (times.Count == POSITIONS)
-            {
-                times.RemoveAt(POSITIONS - 1);
-            }
+            times.RemoveAt(POSITIONS - 1);
             times.Insert(0, Time.deltaTime);
         }
     }

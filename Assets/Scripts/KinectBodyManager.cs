@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Windows.Kinect;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -38,7 +39,7 @@ public class KinectBodyManager : MonoBehaviour
 
     public ICollection<KinectBody> Bodies
     {
-        get { return kinectBodies.Values; }
+        get { return kinectBodies.Values.Where(p => p.enabled).ToList(); }
     }
 
     #region MonoBehaviour
@@ -61,16 +62,10 @@ public class KinectBodyManager : MonoBehaviour
 
         // figure out if any bodies have been updated
         // also keep track of the current tracked IDs
-        var trackedIDs = new List<ulong>();
-        foreach (var body in data)
-        {
-            if (body.IsTracked)
-            {
-                trackedIDs.Add(body.TrackingId);
-            }
-        }
+        var trackedIDs = (from body in data where body.IsTracked && body != null select body.TrackingId);
+        var trackedBodies = (from body in data where body.IsTracked && body != null select body);
 
-        // remove untracked bodies
+        // disable untracked bodies
         foreach (var id in kinectBodies.Keys)
         {
             if (!trackedIDs.Contains(id))
@@ -81,21 +76,18 @@ public class KinectBodyManager : MonoBehaviour
         }
 
         // add any new bodies
-        foreach (var body in data)
+        foreach (var body in trackedBodies)
         {
-            if (body.IsTracked)
+            if (!kinectBodies.ContainsKey(body.TrackingId))
             {
-                if (!kinectBodies.ContainsKey(body.TrackingId))
-                {
-                    var newBody = gameObject.AddComponent<KinectBody>();
-                    newBody.Body = body;
-                    kinectBodies[body.TrackingId] = newBody;
-                    OnBodyEnter(newBody);
-                }
-                else if (!kinectBodies[body.TrackingId].enabled)
-                {
-                    kinectBodies[body.TrackingId].enabled = true;
-                }
+                var newBody = gameObject.AddComponent<KinectBody>();
+                newBody.Body = body;
+                kinectBodies[body.TrackingId] = newBody;
+                OnBodyEnter(newBody);
+            }
+            else if (!kinectBodies[body.TrackingId].enabled)
+            {
+                kinectBodies[body.TrackingId].enabled = true;
             }
         }
     }
