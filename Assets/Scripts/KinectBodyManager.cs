@@ -133,8 +133,8 @@ public class KinectBodyManager : MonoBehaviour
             debugText.text = "Hand Velocity\n";
             foreach (var body in Bodies)
             {
-                debugText.text += "Left: " + body.Velocity(Windows.Kinect.JointType.HandLeft) + "\t";
-                debugText.text += "Right: " + body.Velocity(Windows.Kinect.JointType.HandRight) + "\n";
+                debugText.text += "Left: " + body.Velocity(JointType.HandLeft) + "\t";
+                debugText.text += "Right: " + body.Velocity(JointType.HandRight) + "\n";
             }
 
             yield return null;

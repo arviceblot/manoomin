@@ -3,6 +3,7 @@ using System.Collections;
 using Windows.Kinect;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class KinectBody : MonoBehaviour
 {
@@ -14,15 +15,15 @@ public class KinectBody : MonoBehaviour
     /// <summary>
     /// Current positions of the joints in corrected space.
     /// </summary>
-    private IDictionary<Windows.Kinect.JointType, Vector3> positions;
+    private Dictionary<JointType, Vector3> positions;
     /// <summary>
     /// List of last N positions used for calculating velocities.
     /// </summary>
-    private IDictionary<Windows.Kinect.JointType, IList<Vector3>> lastNpositions;
+    private Dictionary<JointType, LinkedList<Vector3>> lastNpositions;
     /// <summary>
     /// Delta times for the last N positions, also used for velocity.
     /// </summary>
-    private IList<float> times;
+    private LinkedList<float> times;
 
     public ulong Id
     {
@@ -45,38 +46,38 @@ public class KinectBody : MonoBehaviour
     {
         positions = new Dictionary<JointType, Vector3>();
 
-        lastNpositions = new Dictionary<JointType, IList<Vector3>>();
-        for (JointType joint = JointType.SpineBase; joint <= JointType.ThumbRight; joint++)
+        lastNpositions = new Dictionary<JointType, LinkedList<Vector3>>();
+        foreach (JointType joint in Enum.GetValues(typeof(JointType)))
         {
-            lastNpositions[joint] = new List<Vector3>(POSITIONS);
+            lastNpositions[joint] = new LinkedList<Vector3>();
             for (int i = 0; i < POSITIONS; i++)
             {
-                lastNpositions[joint][i] = Vector3.zero;
+                lastNpositions[joint].AddFirst(new Vector3());
             }
         }
 
-        times = new List<float>(POSITIONS);
+        times = new LinkedList<float>();
         for (int i = 0; i < POSITIONS; i++)
         {
-            times[i] = 0f;
+            times.AddFirst(0f);
         }
     }
 
     public void Update()
     {
         // update positions of all parts
-        for (JointType joint = JointType.SpineBase; joint <= JointType.ThumbRight; joint++)
+        foreach (JointType joint in Enum.GetValues(typeof(JointType)))
         {
             positions[joint] = ProjectJointPosition(body.Joints[joint]);
 
-            // remove the last item
-            lastNpositions[joint].RemoveAt(POSITIONS - 1);
             // add new one to the front
-            lastNpositions[joint].Insert(0, positions[joint]);
+            lastNpositions[joint].AddFirst(positions[joint]);
+            // remove the last item
+            lastNpositions[joint].RemoveLast();
 
             // update times
-            times.RemoveAt(POSITIONS - 1);
-            times.Insert(0, Time.deltaTime);
+            times.AddFirst(Time.deltaTime);
+            times.RemoveLast();
         }
     }
 
@@ -85,7 +86,7 @@ public class KinectBody : MonoBehaviour
     public Vector3 Velocity(JointType joint)
     {
         //var average = Vector3.zero;
-        var diff = lastNpositions[joint][0] - lastNpositions[joint][lastNpositions[joint].Count - 1];
+        var diff = lastNpositions[joint].First() - lastNpositions[joint].Last();
         //foreach (var point in lastNpositions[joint])
         //{
         //    average += point;
