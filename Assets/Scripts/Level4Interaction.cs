@@ -7,6 +7,7 @@ public class Level4Interaction : MonoBehaviour
     [SerializeField]
     private Vector2 maxPosition = new Vector2(1, 1);
     [SerializeField]
+    private Vector2 minPosition = new Vector2(-1, -1);
     [SerializeField]
     private GameObject basket;
 

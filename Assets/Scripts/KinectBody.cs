@@ -96,6 +96,11 @@ public class KinectBody : MonoBehaviour
         return diff / times.Sum();
     }
 
+    public Vector2 Position(JointType joint)
+    {
+        return positions[joint];
+    }
+
     private static Vector3 ProjectJointPosition(Windows.Kinect.Joint joint, float z = 0f)
     {
         // TODO: do projection space calculations here instead of 10x values
