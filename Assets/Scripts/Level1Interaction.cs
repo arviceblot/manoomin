@@ -2,7 +2,7 @@
 using System.Collections;
 using Windows.Kinect;
 
-public class Level1Interaction : MonoBehaviour
+public class Level1Interaction : LevelInteration
 {
     [SerializeField]
     private float velocityThreshold = 5f;
@@ -15,31 +15,23 @@ public class Level1Interaction : MonoBehaviour
     [SerializeField]
     private GameObject spawnPrefab;
 
-    private KinectBodyManager bodyManager;
     private float lastSpawnTime;
 
     #region MonoBehaviour
 
-    private void Start()
+    public override void Start()
     {
-        bodyManager = FindObjectOfType<KinectBodyManager>();
+        base.Start();
         lastSpawnTime = spawnInterval;
     }
 
     private void Update()
     {
-        var average = Vector3.zero;
-
         // get the average velocity of each body's hands
-        foreach (var body in bodyManager.Bodies)
-        {
-            average += body.Velocity(JointType.HandLeft);
-            average += body.Velocity(JointType.HandRight);
-        }
-
-        average /= bodyManager.Bodies.Count * 2f;
+        var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });
 
         lastSpawnTime += Time.deltaTime;
+
         // check if users are moving too fast
         if (average.magnitude < velocityThreshold && average.magnitude > minimumVelocity)
         {

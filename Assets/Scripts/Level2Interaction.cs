@@ -3,18 +3,17 @@ using System.Collections;
 using System.Linq;
 using Windows.Kinect;
 
-public class Level2Interaction : MonoBehaviour
+public class Level2Interaction : LevelInteration
 {
     [SerializeField]
     private float force = 1f;
 
-    private KinectBodyManager bodyManager;
     private ParchingRice[] rice;
 
     // Use this for initialization
-    private void Start()
+    public override void Start()
     {
-        bodyManager = FindObjectOfType<KinectBodyManager>();
+        base.Start();
 
         rice = FindObjectsOfType<ParchingRice>();
     }
@@ -23,16 +22,7 @@ public class Level2Interaction : MonoBehaviour
     private void Update()
     {
         // get average hand velocities
-        var average = Vector3.zero;
-        foreach (var body in bodyManager.Bodies)
-        {
-            average += body.Velocity(JointType.HandLeft);
-            average += body.Velocity(JointType.HandRight);
-        }
-        if (average != Vector3.zero)
-        {
-            average /= bodyManager.Bodies.Count * 2f;
-        }
+        var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });
 
         // move the rice in the average velocity
         foreach (var grain in rice)
