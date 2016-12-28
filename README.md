@@ -1,2 +1,2 @@
 # manoominike
-THE Wild Ricing Game
+An Ojibwe Language Learning Experience
