@@ -140,6 +140,7 @@ public class KinectBodyManager : MonoBehaviour
             yield return null;
         }
     }
+
     public static Vector3 GetJointPosition2D(Windows.Kinect.Joint joint, float z = 0f)
     {
         // TODO: do projection space calculations here instead of 10x values

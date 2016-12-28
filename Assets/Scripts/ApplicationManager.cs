@@ -11,7 +11,15 @@ public class ApplicationManager : MonoBehaviour
     }
 
     [SerializeField]
+    private bool useDebugMode = true;
+
+    [SerializeField]
     private KeyCode m_quitKey = KeyCode.Escape;
+
+    public bool UseDebugeMode
+    {
+        get { return useDebugMode; }
+    }
 
     private void Awake()
     {

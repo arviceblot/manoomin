@@ -17,6 +17,13 @@ public class Level3Interaction : LevelInteration
     {
         base.Start();
 
+        if (this.AppManager.UseDebugeMode)
+        {
+            // enable debug elements
+            slider.enabled = true;
+            label.enabled = true;
+        }
+
         slider.maxValue = 100;
         slider.minValue = 0;
         slider.value = slider.minValue;

@@ -15,11 +15,22 @@ public class Level5Interaction : LevelInteration
     [SerializeField]
     private Text debugText;
 
+    public override void Start()
+    {
+        base.Start();
+
+        if (AppManager.UseDebugeMode)
+        {
+            debugText.enabled = true;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         // the number of users with hands above heads
         var countAbove = 0f;
+
         foreach (var body in BodyManager.Bodies)
         {
             if (body.Position(JointType.HandLeft).y > body.Position(JointType.Head).y
@@ -28,13 +39,14 @@ public class Level5Interaction : LevelInteration
                 countAbove++;
             }
         }
+
         debugText.text = "Users above: " + countAbove;
+
         if (countAbove / (float)BodyManager.Bodies.Count > (float)BodyManager.Bodies.Count / 2f)
         {
             // more than half
             gift.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, scale * Time.deltaTime));
             debugText.text += " Force: " + scale * Time.deltaTime;
         }
-
     }
 }

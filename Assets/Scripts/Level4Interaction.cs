@@ -5,21 +5,31 @@ using Windows.Kinect;
 public class Level4Interaction : LevelInteration
 {
     [SerializeField]
-    private Vector2 maxPosition = new Vector2(1, 1);
+    private ParticleSystem huskParticles;
     [SerializeField]
-    private Vector2 minPosition = new Vector2(-1, -1);
-    [SerializeField]
-    private GameObject basket;
+    private float triggerForce = 10;
 
-    // Update is called once per frame
+    private ParticleSystem.EmissionModule huskEmission;
+
+    public override void Start()
+    {
+        base.Start();
+
+        huskEmission = huskParticles.emission;
+    }
+
     void Update()
     {
         // get average hand velocities
         var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });
 
-        // clamp
-        basket.transform.position = new Vector3(
-            Mathf.Clamp(basket.transform.position.x + average.x, minPosition.x, maxPosition.x),
-            Mathf.Clamp(basket.transform.position.y + average.y, minPosition.y, maxPosition.y));
+        if (average.magnitude >= triggerForce)
+        {
+            huskEmission.enabled = true;
+        }
+        else
+        {
+            huskEmission.enabled = false;
+        }
     }
 }

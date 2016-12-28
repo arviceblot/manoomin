@@ -2,7 +2,15 @@
 
 public class LevelInteration : MonoBehaviour
 {
+    private ApplicationManager appManager;
+
     private KinectBodyManager bodyManager;
+
+    public ApplicationManager AppManager
+    {
+        get { return this.appManager; }
+    }
+
     public KinectBodyManager BodyManager
     {
         get { return this.bodyManager; }
@@ -11,6 +19,7 @@ public class LevelInteration : MonoBehaviour
     public virtual void Start()
     {
         bodyManager = FindObjectOfType<KinectBodyManager>();
+        appManager = FindObjectOfType<ApplicationManager>();
     }
 
     public Vector3 GetAverage(Windows.Kinect.JointType[] joints)
