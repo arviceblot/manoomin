@@ -12,7 +12,6 @@ public class Level3Interaction : LevelInteration
     [SerializeField]
     private float fallSpeed = 10f;
 
-    // Use this for initialization
     public override void Start()
     {
         base.Start();
@@ -29,8 +28,7 @@ public class Level3Interaction : LevelInteration
         slider.value = slider.minValue;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         // decrease slider by update amount
         slider.value -= fallSpeed * Time.deltaTime;

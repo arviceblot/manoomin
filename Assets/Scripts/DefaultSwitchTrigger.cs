@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Default trigger for changing a scene.
+/// </summary>
 public class DefaultSwitchTrigger : SceneChangeTrigger
 {
     [SerializeField]

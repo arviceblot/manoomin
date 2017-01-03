@@ -18,7 +18,7 @@ public class Level4Interaction : LevelInteration
         huskEmission = huskParticles.emission;
     }
 
-    void Update()
+    private void Update()
     {
         // get average hand velocities
         var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });

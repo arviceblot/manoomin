@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+/// <summary>
+/// Trigger class for changing scenes.
+/// </summary>
 public class ChangeScene : MonoBehaviour
 {
     [SerializeField]
@@ -42,6 +45,9 @@ public class ChangeScene : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Changes the scene.
+    /// </summary>
     private void Change()
     {
         // remove the parts of the filepath necessary for loading the scene correctly

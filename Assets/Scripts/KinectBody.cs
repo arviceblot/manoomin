@@ -1,15 +1,26 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Windows.Kinect;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 
+/// <summary>
+/// This class manages Kinecy body data and calculations.
+/// </summary>
 public class KinectBody : MonoBehaviour
 {
+    /// <summary>
+    /// The number of position and time values we track for calculating velocity.
+    /// </summary>
     private static int POSITIONS = 5;
 
+    /// <summary>
+    /// The unique Id associated with this body.
+    /// </summary>
     private ulong id;
+    /// <summary>
+    /// The Kinect Body associated with this body.
+    /// </summary>
     private Body body;
 
     /// <summary>
@@ -25,11 +36,17 @@ public class KinectBody : MonoBehaviour
     /// </summary>
     private LinkedList<float> times;
 
+    /// <summary>
+    /// Gets the Id.
+    /// </summary>
     public ulong Id
     {
         get { return id; }
     }
 
+    /// <summary>
+    /// Gets or sets the Kinect Body.
+    /// </summary>
     public Body Body
     {
         get { return body; }
@@ -87,24 +104,53 @@ public class KinectBody : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Calculates the velocity for a specific joint for this body.
+    /// </summary>
+    /// <param name="joint">
+    /// The joint.
+    /// </param>
+    /// <returns>
+    /// the velocity vector.
+    /// </returns>
     public Vector3 Velocity(JointType joint)
     {
-        //var average = Vector3.zero;
+        if (lastNpositions == null)
+        {
+            return new Vector3();
+        }
+
         var diff = lastNpositions[joint].First() - lastNpositions[joint].Last();
-        //foreach (var point in lastNpositions[joint])
-        //{
-        //    average += point;
-        //}
-        //var averagePosition = average / lastNpositions[joint].Count;
-        //return averagePosition / times.Sum();
+
         return diff / times.Sum();
     }
 
+    /// <summary>
+    /// Gets the 2D position for a specific joint.
+    /// </summary>
+    /// <param name="joint">
+    /// The joint.
+    /// </param>
+    /// <returns>
+    /// The position as a 2D vector.
+    /// </returns>
     public Vector2 Position(JointType joint)
     {
         return positions[joint];
     }
 
+    /// <summary>
+    /// Calculates the projected joint position in world space from Kinect space.
+    /// </summary>
+    /// <param name="joint">
+    /// The joint.
+    /// </param>
+    /// <param name="z">
+    /// The base z position.
+    /// </param>
+    /// <returns>
+    /// The projected position.
+    /// </returns>
     private static Vector3 ProjectJointPosition(Windows.Kinect.Joint joint, float z = 0f)
     {
         // TODO: do projection space calculations here instead of 10x values

@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Manages debug mode and application shutdown.
+/// </summary>
 public class ApplicationManager : MonoBehaviour
 {
+    /// <summary>
+    /// The "singleton" instance.
+    /// </summary>
     private static ApplicationManager instance = null;
 
+    /// <summary>
+    /// Gets the instance.
+    /// </summary>
     public static ApplicationManager Instance
     {
         get { return instance; }
@@ -16,6 +24,9 @@ public class ApplicationManager : MonoBehaviour
     [SerializeField]
     private KeyCode m_quitKey = KeyCode.Escape;
 
+    /// <summary>
+    /// Gets the debug mode.
+    /// </summary>
     public bool UseDebugeMode
     {
         get { return useDebugMode; }

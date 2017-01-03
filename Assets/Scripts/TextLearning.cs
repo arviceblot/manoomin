@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/// <summary>
+/// This class manages the playback of text with audio at specific times.
+/// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class TextLearning : MonoBehaviour
 {
@@ -35,6 +38,12 @@ public class TextLearning : MonoBehaviour
         StartCoroutine(Fade());
     }
 
+    /// <summary>
+    /// Coroutine for handling main playback functionality.
+    /// </summary>
+    /// <returns>
+    /// Nothing.
+    /// </returns>
     private IEnumerator Fade()
     {
         // wait for start time

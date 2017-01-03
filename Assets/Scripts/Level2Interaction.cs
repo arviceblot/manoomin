@@ -10,7 +10,6 @@ public class Level2Interaction : LevelInteration
 
     private ParchingRice[] rice;
 
-    // Use this for initialization
     public override void Start()
     {
         base.Start();
@@ -18,8 +17,7 @@ public class Level2Interaction : LevelInteration
         rice = FindObjectsOfType<ParchingRice>();
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         // get average hand velocities
         var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });

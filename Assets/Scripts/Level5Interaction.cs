@@ -24,8 +24,7 @@ public class Level5Interaction : LevelInteration
         auroraEmission = aurora.emission;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // the number of users with hands above heads
         var countAbove = 0f;

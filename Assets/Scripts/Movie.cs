@@ -1,35 +1,51 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Handles movie playback.
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer), typeof(AudioClip))]
 public class Movie : MonoBehaviour
 {
     [SerializeField]
     private bool playOnStart = true;
 
+    private bool isPlaying;
+
+    /// <summary>
+    /// Gets if the movie is set to play on start.
+    /// </summary>
+    public bool PlayOnStart
+    {
+        get { return playOnStart; }
+    }
+
+    /// <summary>
+    /// Gets if the movie is playing.
+    /// </summary>
+    public bool IsPlaying
+    {
+        get { return isPlaying && movieTexture.isPlaying; }
+    }
+
     private MovieTexture movieTexture;
     private AudioSource movieAudio;
 
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
         movieTexture = (MovieTexture)GetComponent<Renderer>().material.mainTexture;
         movieAudio = GetComponent<AudioSource>();
 
+        isPlaying = false;
+
         if (playOnStart)
         {
             movieTexture.Play();
+            isPlaying = true;
             movieAudio.Play();
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void OnDestroy()
+    private void OnDestroy()
     {
         movieTexture.Stop();
         movieAudio.Stop();
