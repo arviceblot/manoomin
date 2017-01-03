@@ -45,6 +45,10 @@ public class KinectBody : MonoBehaviour
     private void Start()
     {
         positions = new Dictionary<JointType, Vector3>();
+        foreach (JointType joint in Enum.GetValues(typeof(JointType)))
+        {
+            positions[joint] = new Vector3();
+        }
 
         lastNpositions = new Dictionary<JointType, LinkedList<Vector3>>();
         foreach (JointType joint in Enum.GetValues(typeof(JointType)))
