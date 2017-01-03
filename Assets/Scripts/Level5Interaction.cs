@@ -6,14 +6,11 @@ using Windows.Kinect;
 public class Level5Interaction : LevelInteration
 {
     [SerializeField]
-    private GameObject gift;
-    [SerializeField]
-    private float maxY = 5f;
-    [SerializeField]
-    [Range(10f, 10000f)]
-    private float scale = 10f;
+    private ParticleSystem aurora;
     [SerializeField]
     private Text debugText;
+
+    private ParticleSystem.EmissionModule auroraEmission;
 
     public override void Start()
     {
@@ -23,6 +20,8 @@ public class Level5Interaction : LevelInteration
         {
             debugText.enabled = true;
         }
+
+        auroraEmission = aurora.emission;
     }
 
     // Update is called once per frame
@@ -42,11 +41,16 @@ public class Level5Interaction : LevelInteration
 
         debugText.text = "Users above: " + countAbove;
 
-        if (countAbove / (float)BodyManager.Bodies.Count > (float)BodyManager.Bodies.Count / 2f)
+        if (countAbove / (float)BodyManager.Bodies.Count >= (float)BodyManager.Bodies.Count / 2f)
         {
             // more than half
-            gift.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, scale * Time.deltaTime));
-            debugText.text += " Force: " + scale * Time.deltaTime;
+            //gift.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, scale * Time.deltaTime));
+            //debugText.text += " Force: " + scale * Time.deltaTime;
+            auroraEmission.enabled = true;
+        }
+        else
+        {
+            auroraEmission.enabled = false;
         }
     }
 }
