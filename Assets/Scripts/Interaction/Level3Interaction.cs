@@ -40,7 +40,7 @@ public class Level3Interaction : LevelInteration
         {
             var amount = Mathf.Clamp(body.Velocity(JointType.FootLeft).y, 0, 20);
             amount += Mathf.Clamp(body.Velocity(JointType.FootRight).y, 0, 20);
-            increase += amount / 2f;
+            increase += amount;
         }
 
         slider.value += increase;
