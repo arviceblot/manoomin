@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Windows.Kinect;
+using System.Collections.Generic;
 
 public class Level1Interaction : LevelInteration
 {
@@ -11,9 +12,9 @@ public class Level1Interaction : LevelInteration
     [SerializeField]
     private float spawnInterval = 1f;
     [SerializeField]
-    private Transform spawnPosition;
-    [SerializeField]
-    private GameObject spawnPrefab;
+    private List<ParticleSystem> harvestParticles;
+
+    private List<ParticleSystem.EmissionModule> harvestEmissions;
 
     private float lastSpawnTime;
 
@@ -23,6 +24,9 @@ public class Level1Interaction : LevelInteration
     {
         base.Start();
         lastSpawnTime = spawnInterval;
+
+        harvestEmissions = new List<ParticleSystem.EmissionModule>();
+        harvestParticles.ForEach(p => harvestEmissions.Add(p.emission));
     }
 
     private void Update()
@@ -38,9 +42,14 @@ public class Level1Interaction : LevelInteration
             // do all the things here
             if (lastSpawnTime > spawnInterval)
             {
-                Instantiate(spawnPrefab, spawnPosition);
+                harvestEmissions.ForEach(e => e.enabled = true);
                 lastSpawnTime = 0f;
             }
+        }
+        else
+        {
+            // don't spawn rice
+            harvestEmissions.ForEach(e => e.enabled = false);
         }
     }
 
