@@ -11,6 +11,13 @@ public class Level3Interaction : LevelInteration
     private Text label;
     [SerializeField]
     private float fallSpeed = 10f;
+    [SerializeField]
+    private ParticleSystem dancingRice;
+    [SerializeField]
+    private float maxNoiseSpeed = 3f;
+
+    private ParticleSystem.NoiseModule dancingNoise;
+    private float minNoiseSpeed;
 
     public override void Start()
     {
@@ -19,13 +26,16 @@ public class Level3Interaction : LevelInteration
         if (ApplicationManager.Instance.UseDebugeMode)
         {
             // enable debug elements
-            slider.enabled = true;
+            slider.gameObject.SetActive(true);
             label.enabled = true;
         }
 
         slider.maxValue = 100;
         slider.minValue = 0;
         slider.value = slider.minValue;
+
+        dancingNoise = dancingRice.noise;
+        minNoiseSpeed = dancingNoise.scrollSpeed.constant;
     }
 
     private void FixedUpdate()
@@ -45,5 +55,7 @@ public class Level3Interaction : LevelInteration
 
         slider.value += increase;
         label.text = slider.value.ToString();
+
+        dancingNoise.scrollSpeed = (maxNoiseSpeed / slider.maxValue) * slider.value;
     }
 }

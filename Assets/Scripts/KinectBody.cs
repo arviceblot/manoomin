@@ -89,6 +89,12 @@ public class KinectBody : MonoBehaviour
         // update positions of all parts
         foreach (JointType joint in Enum.GetValues(typeof(JointType)))
         {
+            // don't set positions for joints that aren't tracked
+            if (body.Joints[joint].TrackingState == TrackingState.NotTracked)
+            {
+                continue;
+            }
+
             positions[joint] = ProjectJointPosition(body.Joints[joint]);
 
             // add new one to the front
@@ -115,7 +121,7 @@ public class KinectBody : MonoBehaviour
     /// </returns>
     public Vector3 Velocity(JointType joint)
     {
-        if (lastNpositions == null)
+        if (lastNpositions[joint] == null)
         {
             return new Vector3();
         }
