@@ -16,7 +16,7 @@ public class Level5Interaction : LevelInteration
     {
         base.Start();
 
-        if (AppManager.UseDebugeMode)
+        if (ApplicationManager.Instance.UseDebugeMode)
         {
             debugText.enabled = true;
         }

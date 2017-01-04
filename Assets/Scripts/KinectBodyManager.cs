@@ -28,10 +28,12 @@ public class KinectBodyManager : MonoBehaviour
             debug = value;
             if (debug)
             {
+                debugText.enabled = true;
                 StartCoroutine(DisplayDebug());
             }
             else
             {
+                debugText.enabled = false;
                 StopCoroutine(DisplayDebug());
             }
         }
@@ -48,6 +50,8 @@ public class KinectBodyManager : MonoBehaviour
     {
         kinectBodies = new Dictionary<ulong, KinectBody>();
         Debug = debug;
+
+        Debug = ApplicationManager.Instance.UseDebugeMode;
     }
 
     private void Update()

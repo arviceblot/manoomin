@@ -16,7 +16,7 @@ public class Level3Interaction : LevelInteration
     {
         base.Start();
 
-        if (this.AppManager.UseDebugeMode)
+        if (ApplicationManager.Instance.UseDebugeMode)
         {
             // enable debug elements
             slider.enabled = true;
