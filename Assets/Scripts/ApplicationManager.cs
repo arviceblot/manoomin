@@ -43,6 +43,17 @@ public class ApplicationManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // disable debug mode if not dev build
+        if (!Debug.isDebugBuild)
+        {
+            useDebugMode = false;
+        }
+
+#if !UNITY_EDITOR
+        // disable cursor for built application
+        Cursor.visible = false;
+#endif
     }
 
     private void Update()
