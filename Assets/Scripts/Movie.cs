@@ -35,6 +35,11 @@ public class Movie : MonoBehaviour
         movieTexture = (MovieTexture)GetComponent<Renderer>().material.mainTexture;
         movieAudio = GetComponent<AudioSource>();
 
+        if (movieAudio.clip == null)
+        {
+            movieAudio.clip = movieTexture.audioClip;
+        }
+
         isPlaying = false;
 
         if (playOnStart)
