@@ -21,7 +21,7 @@ public class Level4Interaction : LevelInteration
     private void Update()
     {
         // get average hand velocities
-        var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });
+        var average = BodyManager.GetAverageVelocity(new JointType[] { JointType.HandLeft, JointType.HandRight });
 
         if (average.magnitude >= triggerForce)
         {

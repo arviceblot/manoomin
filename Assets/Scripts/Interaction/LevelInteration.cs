@@ -2,6 +2,9 @@
 
 public class LevelInteration : MonoBehaviour
 {
+    [SerializeField]
+    private KeyCode manualTrigger = KeyCode.Space;
+
     private ApplicationManager appManager;
 
     private KinectBodyManager bodyManager;
@@ -20,25 +23,5 @@ public class LevelInteration : MonoBehaviour
     {
         bodyManager = FindObjectOfType<KinectBodyManager>();
         appManager = FindObjectOfType<ApplicationManager>();
-    }
-
-    public Vector3 GetAverage(Windows.Kinect.JointType[] joints)
-    {
-        var average = Vector3.zero;
-
-        foreach (var body in BodyManager.Bodies)
-        {
-            foreach (var joint in joints)
-            {
-                average += body.Velocity(joint);
-            }
-        }
-
-        if (average != Vector3.zero)
-        {
-            average /= BodyManager.Bodies.Count * (float)joints.Length;
-        }
-
-        return average;
     }
 }

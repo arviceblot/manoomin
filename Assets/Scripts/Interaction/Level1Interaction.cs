@@ -32,7 +32,7 @@ public class Level1Interaction : LevelInteration
     private void Update()
     {
         // get the average velocity of each body's hands
-        var average = GetAverage(new JointType[] { JointType.HandLeft, JointType.HandRight });
+        var average = BodyManager.GetAverageVelocity(new JointType[] { JointType.HandLeft, JointType.HandRight });
 
         lastSpawnTime += Time.deltaTime;
 

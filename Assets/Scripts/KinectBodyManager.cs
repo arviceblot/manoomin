@@ -8,8 +8,12 @@ using System.Collections.Generic;
 
 public class KinectBodyManager : MonoBehaviour
 {
+    #region Events
+
     public event Action<KinectBody> EventBodyEnter;
     public event Action<ulong> EventBodyLeave;
+
+    #endregion
 
     [SerializeField]
     private BodySourceManager bodySourceManager;
@@ -66,8 +70,8 @@ public class KinectBodyManager : MonoBehaviour
 
         // figure out if any bodies have been updated
         // also keep track of the current tracked IDs
-        var trackedIDs = (from body in data where body.IsTracked && body != null select body.TrackingId);
-        var trackedBodies = (from body in data where body.IsTracked && body != null select body);
+        var trackedIDs = from body in data where body.IsTracked && body != null select body.TrackingId;
+        var trackedBodies = from body in data where body.IsTracked && body != null select body;
 
         // disable untracked bodies
         foreach (var id in kinectBodies.Keys)
@@ -116,6 +120,8 @@ public class KinectBodyManager : MonoBehaviour
         }
     }
 
+    #endregion
+
     public KinectBody GetBody(ulong id)
     {
         if (kinectBodies.ContainsKey(id))
@@ -128,7 +134,35 @@ public class KinectBodyManager : MonoBehaviour
         }
     }
 
-    #endregion
+
+    /// <summary>
+    /// Gets the average velocity of all bodies for specific joints.
+    /// </summary>
+    /// <param name="joints">
+    /// The joints.
+    /// </param>
+    /// <returns>
+    /// Average velocity as a vector.
+    /// </returns>
+    public Vector3 GetAverageVelocity(JointType[] joints)
+    {
+        var average = Vector3.zero;
+
+        foreach (var body in Bodies)
+        {
+            foreach (var joint in joints)
+            {
+                average += body.Velocity(joint);
+            }
+        }
+
+        if (average != Vector3.zero)
+        {
+            average /= Bodies.Count * (float)joints.Length;
+        }
+
+        return average;
+    }
 
     private IEnumerator DisplayDebug()
     {
