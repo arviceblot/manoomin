@@ -24,6 +24,9 @@ public class ApplicationManager : MonoBehaviour
     [SerializeField]
     private KeyCode m_quitKey = KeyCode.Escape;
 
+    [SerializeField]
+    private GameObject debugCanvas;
+
     /// <summary>
     /// Gets the debug mode.
     /// </summary>
@@ -44,16 +47,17 @@ public class ApplicationManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // disable debug mode if not dev build
-        if (!Debug.isDebugBuild)
-        {
-            useDebugMode = false;
-        }
-
 #if !UNITY_EDITOR
         // disable cursor for built application
         Cursor.visible = false;
+        // disable debug mode if not dev build
+        useDebugMode = false;
 #endif
+    }
+
+    private void Start()
+    {
+        debugCanvas.SetActive(useDebugMode);
     }
 
     private void Update()
