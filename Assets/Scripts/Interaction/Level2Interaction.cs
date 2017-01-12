@@ -39,7 +39,16 @@ public class Level2Interaction : LevelInteration
     private void Update()
     {
         // get average hand velocities
-        //var average = BodyManager.GetAverageVelocity(new JointType[] { JointType.HandLeft, JointType.HandRight });
+        var average = BodyManager.GetAverageVelocity(new JointType[] { JointType.HandLeft, JointType.HandRight });
+
+        if (average.magnitude > 5)
+        {
+            // rotate the wind around it's own X axis
+            var direction = average.normalized.x;
+            wind.transform.Rotate(Vector3.right * direction * Time.deltaTime * 10000);
+
+            /*
+        }
 
         var average = new Vector2();
 
@@ -60,11 +69,12 @@ public class Level2Interaction : LevelInteration
         //if (amount.magnitude > 5f)
         if (average.magnitude > 2f)
         {
+        */
             // we are stirring!
             //wind.transform.rotation = Quaternion.LookRotation(average);
             notStirringTime = 0f;
             stirringTime += Time.deltaTime;
-            wind.transform.rotation = Quaternion.Lerp(wind.transform.rotation, Quaternion.LookRotation(average * -1), Time.deltaTime * 6f);
+            //wind.transform.rotation = Quaternion.Lerp(wind.transform.rotation, Quaternion.LookRotation(average * -1), Time.deltaTime * 6f);
             riceWind.multiplier = Mathf.Lerp(riceWind.multiplier, 1, 1);
 
             if (stirringTime > parchedSpawnTimeThreshold)

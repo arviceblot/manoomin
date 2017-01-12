@@ -8,9 +8,12 @@ public class Level5Interaction : LevelInteration
     [SerializeField]
     private ParticleSystem aurora;
     [SerializeField]
+    private Movie movie;
+    [SerializeField]
     private Text debugText;
 
     private ParticleSystem.EmissionModule auroraEmission;
+    private float movieLength;
 
     public override void Start()
     {
@@ -25,6 +28,8 @@ public class Level5Interaction : LevelInteration
 
         // ensure emmision is disabled at start
         auroraEmission.enabled = false;
+
+        movieLength = movie.MovieTexture.duration;
     }
 
     private void Update()
@@ -43,16 +48,25 @@ public class Level5Interaction : LevelInteration
 
         debugText.text = "Users above: " + countAbove;
 
-        if (countAbove / (float)BodyManager.Bodies.Count >= (float)BodyManager.Bodies.Count / 2f)
+        // make sure we fade out the song at the end
+        if (PlayTime + 10 > movieLength)
+        {
+            auroraEmission.enabled = false;
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 0, Time.deltaTime);
+        }
+        else if (countAbove / (float)BodyManager.Bodies.Count >= (float)BodyManager.Bodies.Count / 2f)
         {
             // more than half
             //gift.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, scale * Time.deltaTime));
             //debugText.text += " Force: " + scale * Time.deltaTime;
             auroraEmission.enabled = true;
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 1, Time.deltaTime);
         }
         else
         {
             auroraEmission.enabled = false;
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 0, Time.deltaTime);
         }
+
     }
 }

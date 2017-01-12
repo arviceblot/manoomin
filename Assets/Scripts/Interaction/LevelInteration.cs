@@ -12,6 +12,8 @@ public class LevelInteration : MonoBehaviour
 
     private KinectBodyManager bodyManager;
 
+    private float startTime;
+
     public AudioSource SoundEffect
     {
         get { return soundEffect; }
@@ -27,6 +29,14 @@ public class LevelInteration : MonoBehaviour
         get { return this.bodyManager; }
     }
 
+    public float PlayTime
+    {
+        get
+        {
+            return Time.time - startTime;
+        }
+    }
+
     public virtual void Start()
     {
         bodyManager = FindObjectOfType<KinectBodyManager>();
@@ -37,5 +47,7 @@ public class LevelInteration : MonoBehaviour
         {
             soundEffect.volume = 0;
         }
+
+        startTime = Time.time;
     }
 }

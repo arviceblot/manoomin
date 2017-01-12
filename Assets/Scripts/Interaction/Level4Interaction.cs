@@ -26,10 +26,12 @@ public class Level4Interaction : LevelInteration
         if (average.magnitude >= triggerForce)
         {
             huskEmission.enabled = true;
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 1, Time.deltaTime);
         }
         else
         {
             huskEmission.enabled = false;
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 0, Time.deltaTime);
         }
     }
 }

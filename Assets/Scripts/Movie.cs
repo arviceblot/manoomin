@@ -10,6 +10,8 @@ public class Movie : MonoBehaviour
     private bool playOnStart = true;
 
     private bool isPlaying;
+    private MovieTexture movieTexture;
+    private AudioSource movieAudio;
 
     /// <summary>
     /// Gets if the movie is set to play on start.
@@ -27,8 +29,10 @@ public class Movie : MonoBehaviour
         get { return isPlaying && movieTexture.isPlaying; }
     }
 
-    private MovieTexture movieTexture;
-    private AudioSource movieAudio;
+    public MovieTexture MovieTexture
+    {
+        get { return movieTexture; }
+    }
 
     private void Start()
     {

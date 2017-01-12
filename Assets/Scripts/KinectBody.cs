@@ -160,6 +160,7 @@ public class KinectBody : MonoBehaviour
     private static Vector3 ProjectJointPosition(Windows.Kinect.Joint joint, float z = 0f)
     {
         // TODO: do projection space calculations here instead of 10x values
-        return new Vector3(joint.Position.X, joint.Position.Y * 10, z);
+        // X is negative because, for this project, we need a mirror mode
+        return new Vector3(-joint.Position.X, joint.Position.Y * 10, z);
     }
 }
