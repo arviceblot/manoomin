@@ -22,6 +22,9 @@ public class Level5Interaction : LevelInteration
         }
 
         auroraEmission = aurora.emission;
+
+        // ensure emmision is disabled at start
+        auroraEmission.enabled = false;
     }
 
     private void Update()

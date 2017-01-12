@@ -5,9 +5,17 @@ public class LevelInteration : MonoBehaviour
     [SerializeField]
     private KeyCode manualTrigger = KeyCode.Space;
 
+    [SerializeField]
+    private AudioSource soundEffect;
+
     private ApplicationManager appManager;
 
     private KinectBodyManager bodyManager;
+
+    public AudioSource SoundEffect
+    {
+        get { return soundEffect; }
+    }
 
     public ApplicationManager AppManager
     {
@@ -23,5 +31,11 @@ public class LevelInteration : MonoBehaviour
     {
         bodyManager = FindObjectOfType<KinectBodyManager>();
         appManager = FindObjectOfType<ApplicationManager>();
+
+        // start audio effects at 0
+        if (soundEffect != null)
+        {
+            soundEffect.volume = 0;
+        }
     }
 }

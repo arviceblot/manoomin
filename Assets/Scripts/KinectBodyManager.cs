@@ -21,6 +21,8 @@ public class KinectBodyManager : MonoBehaviour
     private bool debug = false;
     [SerializeField]
     private Text debugText;
+    [SerializeField]
+    private GameObject kinectView;
 
     private IDictionary<ulong, KinectBody> kinectBodies;
 
@@ -40,6 +42,7 @@ public class KinectBodyManager : MonoBehaviour
                 debugText.enabled = false;
                 StopCoroutine(DisplayDebug());
             }
+            kinectView.SetActive(debug);
         }
     }
 

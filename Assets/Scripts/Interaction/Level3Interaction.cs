@@ -53,9 +53,11 @@ public class Level3Interaction : LevelInteration
             increase += amount;
         }
 
-        slider.value += increase;
+        slider.value = Mathf.Clamp(slider.value + increase, slider.minValue, slider.maxValue);
         label.text = slider.value.ToString();
 
         dancingNoise.scrollSpeed = (maxNoiseSpeed / slider.maxValue) * slider.value;
+
+        SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, slider.value / slider.maxValue, Time.deltaTime);
     }
 }

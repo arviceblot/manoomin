@@ -60,6 +60,7 @@ public class Level2Interaction : LevelInteration
         //if (amount.magnitude > 5f)
         if (average.magnitude > 2f)
         {
+            // we are stirring!
             //wind.transform.rotation = Quaternion.LookRotation(average);
             notStirringTime = 0f;
             stirringTime += Time.deltaTime;
@@ -70,6 +71,9 @@ public class Level2Interaction : LevelInteration
             {
                 parchedEmmision.rateOverTime = Mathf.Lerp(parchedEmmision.rateOverTime.constant, 5, 10);
             }
+
+            // audio
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 1, Time.deltaTime);
         }
         else
         {
@@ -83,6 +87,8 @@ public class Level2Interaction : LevelInteration
             riceWind = rice.externalForces;
             riceWind.multiplier = Mathf.Lerp(riceWind.multiplier, 0, 1);
             parchedEmmision.rateOverTime = Mathf.Lerp(parchedEmmision.rateOverTime.constant, 0, 5);
+
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 0, Time.deltaTime);
         }
 
 
