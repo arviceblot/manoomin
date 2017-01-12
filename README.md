@@ -1,4 +1,4 @@
-# manoominike
+# manoomin
 An Ojibwe Language Learning Experience
 
 ## Controls
