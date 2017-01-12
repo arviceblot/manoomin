@@ -142,7 +142,7 @@ public class KinectBody : MonoBehaviour
     /// </returns>
     public Vector2 Position(JointType joint)
     {
-        return positions[joint];
+        return positions[joint] != null ? positions[joint] : new Vector3();
     }
 
     /// <summary>

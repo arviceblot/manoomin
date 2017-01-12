@@ -14,10 +14,10 @@ public class Level3Interaction : LevelInteration
     [SerializeField]
     private ParticleSystem dancingRice;
     [SerializeField]
-    private float maxNoiseSpeed = 3f;
+    private float maxNoiseSpeed = 0.5f;
 
     private ParticleSystem.NoiseModule dancingNoise;
-    private float minNoiseSpeed;
+    private float minNoiseSpeed = 0;
 
     public override void Start()
     {
@@ -35,10 +35,9 @@ public class Level3Interaction : LevelInteration
         slider.value = slider.minValue;
 
         dancingNoise = dancingRice.noise;
-        minNoiseSpeed = dancingNoise.scrollSpeed.constant;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // decrease slider by update amount
         slider.value -= fallSpeed * Time.deltaTime;
@@ -48,16 +47,28 @@ public class Level3Interaction : LevelInteration
 
         foreach (var body in BodyManager.Bodies)
         {
-            var amount = Mathf.Clamp(body.Velocity(JointType.FootLeft).y, 0, 20);
-            amount += Mathf.Clamp(body.Velocity(JointType.FootRight).y, 0, 20);
+            var amount = Mathf.Clamp(Mathf.Max(body.Velocity(JointType.FootLeft).y, body.Velocity(JointType.FootRight).y), 0, 20);
             increase += amount;
         }
+        
+        if (increase > 5)
+        {
+            dancingNoise.strength = Mathf.Min(dancingNoise.strength.constant + Time.deltaTime, 1);
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 1, Time.deltaTime);
+        }
+        else
+        {
+            dancingNoise.strength = Mathf.Max(dancingNoise.strength.constant - Time.deltaTime * 0.25f, 0);
+            SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, 0, Time.deltaTime);
+        }
 
+        /*
         slider.value = Mathf.Clamp(slider.value + increase, slider.minValue, slider.maxValue);
         label.text = slider.value.ToString();
 
-        dancingNoise.scrollSpeed = (maxNoiseSpeed / slider.maxValue) * slider.value;
+        dancingNoise.strength = (maxNoiseSpeed / slider.maxValue) * slider.value;
 
         SoundEffect.volume = Mathf.Lerp(SoundEffect.volume, slider.value / slider.maxValue, Time.deltaTime);
+        */
     }
 }
