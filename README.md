@@ -1,4 +1,4 @@
-![manoomin logo]({{ site.url }}/Assets/Art/ManoominLogo.png)
+![manoomin logo](/Assets/Art/ManoominLogo.png)
 An Ojibwe Language Learning Experience
 
 ## Controls
