@@ -1,6 +1,8 @@
 ![manoomin logo](/Assets/Art/ManoominLogo.png)
 An Ojibwe Language Learning Experience
 
+Paid for by the [Duluth Children's Museum](http://www.duluthchildrensmuseum.org/).
+
 ## Controls
 * Change to the next scene: N
 * Quit the application: Esc
